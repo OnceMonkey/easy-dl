@@ -14,7 +14,7 @@ setup(
     author = 'oncemonkey',
     description="A small package for deep learning that setup config and log metric based on pytorch and tensorboard",
     version = '0.1.3',  #版本号
-    # url="https://github.com/",
+    url="https://github.com/OnceMonkey/easy-dl",
     packages = find_packages(),  #包括在安装包内的Python包
     classifiers=[
         "Programming Language :: Python :: 3",
