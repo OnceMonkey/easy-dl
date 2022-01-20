@@ -1,4 +1,5 @@
 import os
+import sys
 import time
 import logging
 
@@ -26,6 +27,7 @@ def loadLogger(work_dir='./', save_name='log.txt', logToFile=True):
         fHandler.setLevel(logging.DEBUG)
         fHandler.setFormatter(formatter)
         logger.addHandler(fHandler)
+        # sys.stdout = fHandler.stream # 设置 print 打印到logger 日志中。
     return logger
 
 
