@@ -1,4 +1,4 @@
-from .base import Logger
+from .base_logger import Logger
 
 from torch.utils.tensorboard import SummaryWriter
 

@@ -46,6 +46,7 @@ class Logger():
 
         # setup logger
         self.logger = loadLogger(self.res_dir, save_name=f'log_{mode}.txt')
+
     
     # log text
     def log(self,msg):

@@ -1,4 +1,5 @@
 import re
+import json
 
 '''
 解析配置参数，接受三种参数:
@@ -7,32 +8,44 @@ import re
 3. dict 参数字典
 返回包含参数属性的对象
 '''
-
-def from_dict(dic):
+class Config:
+    config_name = 'default'
     pass
+
+def get_attrs(obj):
+    attr_dict = {}
+    for name in dir(obj):
+        if callable(getattr(obj, name)): continue
+        if re.match('__.*__', name): continue
+        if re.match('__.*', name): continue
+        if re.match('.*__', name): continue
+        attr_dict[name] = getattr(obj, name)
+    return attr_dict
+
+def from_dict(dic:dict):
+    config = Config()
+    for name, value in dic.items():
+        setattr(config, name, value)
+    return config
 
 def from_json(path):
-    pass
+    with open(path,'r') as f:
+        param_dict = json.load(f)
+        return from_dict(param_dict)
 
 def config_setup(config):
-    if isinstance(config,object):
-        return config
-    elif isinstance(config,'str'):
-        pass
+    if isinstance(config,str):
+        return from_json(config)
     elif isinstance(config,dict):
-        pass
+        return from_dict(config)
     else:
-        raise NotImplementedError
+        return config
     
-def strconfig(config:object):
-    attrs=[]
-    for name in dir(config):
-        if callable(getattr(config, name)):continue
-        if re.match('__.*__',name):continue
-        attrs.append(name)
-    
+def strconfig(config):
+    attr_dict = get_attrs(config)
+
     s = '\n# ----------------------------parameters table--------------------------- #\n'
-    for name in attrs:
-        s += f'{name}: {getattr(config, name)}\n'
+    for name,value in attr_dict.items():
+        s += f'{name}: {value}\n'
     s += '# ------------------------------------------------------------------------ #'
     return s
