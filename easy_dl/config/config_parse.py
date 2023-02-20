@@ -1,18 +1,10 @@
-import argparse
-import re
-
 '''
 使用argparse对参数进行解析，方便通过命令行与程序进行交互
 '''
-def get_attrs(obj):
-    attr_dict = {}
-    for name in dir(obj):
-        if callable(getattr(obj, name)): continue
-        if re.match('__.*__', name): continue
-        if re.match('__.*', name): continue
-        if re.match('.*__', name): continue
-        attr_dict[name] = getattr(obj, name)
-    return attr_dict
+
+import argparse
+
+
 
 def str2bool(v):
     if isinstance(v, bool):
@@ -25,24 +17,24 @@ def str2bool(v):
         raise argparse.ArgumentTypeError('Boolean value expected.')
 
 
-def config_parse(config):
-    attr_dict=get_attrs(config)
+def parse(config:dict):
+    '''
+    使用argparse解析字典中的项
+    '''
 
     parser = argparse.ArgumentParser()
     # start to parse
-    for name,value in attr_dict.items():
+    for name, value in config.items():
         if isinstance(value, list):
             parser.add_argument(f'--{name}', type=type(value[0]), nargs='*', default=value)
         elif isinstance(value, bool):
             parser.add_argument(f'--{name}', type=str2bool, default=value)
         else:
             parser.add_argument(f'--{name}', type=type(value), default=value)
-
     args = parser.parse_args()
 
     # update config
-    for name, value in vars(args).items():
-        setattr(config, name, value)
+    config.update(vars(args).items())
 
     return config
 
