@@ -2,6 +2,5 @@
 build
 dist
 *.egg-info
-examples/
 */__pycache__
 */*/__pycache__

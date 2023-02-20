@@ -1,0 +1,41 @@
+# 使用一个yaml文件，将不同的模型使用的参数配置到此处。
+
+
+model1:
+  # 数据集
+  train_dir: './data/train'
+  valid_dir: './data/valid'
+
+  # 模型
+  latent_dim: 16
+  channels: [ 512,256,128,64,32,16,16,16 ]
+
+  # 训练过程
+  batch_size: 32
+  lr: 0.001
+
+  # 日志
+  logger_dir: './results'
+  running_name: 'default'
+
+model2:
+  # 数据集
+  train_dir: './data/train'
+  valid_dir: './data/valid'
+
+  # 模型
+  latent_dim: 64
+  channels: [ 512,256,128,64,32,16,16,16 ]
+
+  # 训练过程
+  batch_size: 16
+  lr: 0.005
+
+  # 日志
+  logger_dir: './results'
+  running_name: 'default'
+
+
+
+
+
