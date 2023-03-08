@@ -17,6 +17,32 @@ def makedir_if_not_exists(dir_path):
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)
 
+def create_results_dir(base_root='.', runname=None, time_suffix=True):
+    '''
+    创建结果保存目录
+
+    Examples:
+        print(create_results_dir(base_root='.', runname='', time_suffix=False)) # 结果保存在当前目录
+        print(create_results_dir(base_root='.', runname='', time_suffix=True)) # 结果保存在当前时间戳目录下
+
+        print(create_results_dir(base_root='.', runname='results', time_suffix=False)) # 结果保存在results目录下
+        print(create_results_dir(base_root='results', runname='test', time_suffix=False)) # 结果保存在results/test目录下
+    '''
+    res_dir = os.path.join(base_root, runname)
+
+    # 添加时间后缀
+    if time_suffix:
+        time_stamp = time.strftime("%Y%m%d%H%M%S", time.localtime())
+        if runname is None or runname == '':
+            res_dir = f'{time_stamp}'
+        else:
+            res_dir = f'{res_dir}_{time_stamp}'
+
+    # 创建目录
+    makedir_if_not_exists(res_dir)
+    print(f'The results is in:{os.path.abspath(res_dir)}.')
+    return res_dir
+
 def loadLogger(work_dir, save_name='log.txt'):
     if work_dir in logging.Logger.manager.loggerDict:
         return logging.getLogger(work_dir)
@@ -38,8 +64,11 @@ def loadLogger(work_dir, save_name='log.txt'):
 
 
 class Logger():
-    def __init__(self, base_root, runname=None, time_suffix=True):
+    def __init__(self, base_root='.', runname=None, time_suffix=True):
         '''
+        base_root_timesuffix
+        base_root/runname_timesuffix
+        base_root/runname_timesuffix
 
         :param base_root: 存放多次实验结果的目录
         :param runname: 实验名，如果为None则以时间作为名称
@@ -52,14 +81,7 @@ class Logger():
         '''
         # create the dir of results
         self.base_root = base_root
-        time_stamp = time.strftime("%Y%m%d%H%M%S", time.localtime())
-        if runname is None:
-            self.runname = time_stamp
-        else:
-            self.runname = f'{runname}_{time_stamp}' if time_suffix else runname
-        self.res_dir = os.path.join(self.base_root, self.runname)
-        makedir_if_not_exists(self.res_dir)
-        print(f'The results is in:{os.path.abspath(self.res_dir)}.')
+        self.res_dir = create_results_dir(base_root, runname, time_suffix)
         # setup logger
         self.logger = None
 

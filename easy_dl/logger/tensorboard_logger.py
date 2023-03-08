@@ -2,7 +2,7 @@ from .basic_logger import Logger
 from torch.utils.tensorboard import SummaryWriter
 
 class TensorboardLogger(Logger):
-    def __init__(self, base_root, runname=None, time_suffix=True):
+    def __init__(self, base_root='.', runname=None, time_suffix=True):
         '''
 
         :param base_root: 存放多次实验结果的目录
@@ -18,6 +18,7 @@ class TensorboardLogger(Logger):
             logger.log_image(image, '00000.png')
         '''
         super().__init__(base_root, runname, time_suffix)
+        self.writer = None
 
     def log_metric(self, name, value, global_step):
         '''
