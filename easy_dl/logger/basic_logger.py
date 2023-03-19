@@ -28,17 +28,16 @@ def create_results_dir(base_root='.', runname=None, time_suffix=True):
         print(create_results_dir(base_root='.', runname='results', time_suffix=False)) # 结果保存在results目录下
         print(create_results_dir(base_root='results', runname='test', time_suffix=False)) # 结果保存在results/test目录下
     '''
-    res_dir = os.path.join(base_root, runname)
-
     # 添加时间后缀
     if time_suffix:
         time_stamp = time.strftime("%Y%m%d%H%M%S", time.localtime())
         if runname is None or runname == '':
-            res_dir = f'{time_stamp}'
+            runname = f'{time_stamp}'
         else:
-            res_dir = f'{res_dir}_{time_stamp}'
+            runname = f'{runname}_{time_stamp}'
 
     # 创建目录
+    res_dir = os.path.join(base_root, runname)
     makedir_if_not_exists(res_dir)
     print(f'The results is in:{os.path.abspath(res_dir)}.')
     return res_dir
